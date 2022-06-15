@@ -80,7 +80,7 @@ export const GL = canvasId => {
         return buffer;
     };
 
-    gl.createMeshVAO = (name, {vertices, normals, indeces, uvs}, drawMode = gl.TRIANGLES) => {
+    gl.createMeshVAO = (name, {vertices, normals, indices, uvs}, drawMode = gl.TRIANGLES) => {
         let result = {};
 
         result.drawMode = drawMode;
@@ -106,14 +106,6 @@ export const GL = canvasId => {
             gl.vertexAttribPointer(GL_ATTR_MAP.normal.location, 3, gl.FLOAT, false, 0,0);
         }
 
-        if (indeces) {
-            result.buffIndeces = gl.createBuffer();
-            result.indexCount = indeces.length;
-            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, result.buffIndeces);
-            gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indeces), gl.STATIC_DRAW);
-            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
-        }
-
         if (uvs) {
             result.buffUVs = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, result.buffUVs);
@@ -121,6 +113,14 @@ export const GL = canvasId => {
             gl.enableVertexAttribArray(GL_ATTR_MAP.uv.location);
             gl.vertexAttribPointer(GL_ATTR_MAP.uv.location, 2, gl.FLOAT, false, 0,0);
         }
+
+        if (indices) {
+            result.buffIndices = gl.createBuffer();
+            result.indexCount = indices.length;
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, result.buffIndices);
+            gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+        }
+
 
         gl.bindVertexArray(null);
         gl.bindBuffer(gl.ARRAY_BUFFER, null);

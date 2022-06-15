@@ -81,10 +81,10 @@ export const Primitives = {
         static createModel = gl => new Model(Primitives.quad.createMesh(gl));
         static createMesh = gl => {
             const vertices = [
-                -0.5, 0.5, 0,
-                -0.5, -0.5, 0,
-                0.5, -0.5, 0,
-                0.5, 0,5, 0
+                -1, 1, 0,
+                -1, -1, 0,
+                1, -1, 0,
+                1, 1, 0
             ];
             const uvs = [
                 0, 0,
@@ -92,12 +92,12 @@ export const Primitives = {
                 1, 1,
                 1, 0
             ];
-            const indeces = [
+            const indices = [
                 0, 1, 2,
                 2, 3, 0
             ];
 
-            const mesh = gl.createMeshVAO('Quad', {vertices, indeces, uvs});
+            const mesh = gl.createMeshVAO('Quad', {vertices, indices, uvs});
             mesh.noCulling = false;
             mesh.doBlending = false;
 

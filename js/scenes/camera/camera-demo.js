@@ -6,6 +6,7 @@ import {Primitives} from "../../primitives.js";
 
 import {GridAxisShader} from "../../shaders/grid-axis.shader.js";
 import {QuadShader} from "../../shaders/quad.shader.js";
+import {Model} from "../../model.js";
 
 export const CameraDemo = {
     name: 'Camera',
@@ -19,9 +20,11 @@ export const CameraDemo = {
         const gridShader = new GridAxisShader(gl, camera.projectionMatrix);
         const gridModel = Primitives.grid(true, true).createModel(gl);
 
-        // const quadShader = new QuadShader(gl, camera.projectionMatrix);
-        // const quadModel = Primitives.quad.createModel(gl);
-        // quadModel.transform.setPosition(0, 1, 0);
+        const quadShader = new QuadShader(gl, camera.projectionMatrix);
+        const quad1 = Primitives.quad.createModel(gl);
+        quad1.transform.setPosition(-0.6, 0, 0).setScale(0.4, 0.4, 0.4);
+        const quad2 = new Model(gl.mMeshCache['Quad']);
+        quad2.transform.setPosition(0.6, 0, 0).setScale(0.4, 0.4, 0.4);
 
         const onRender = deltaTime => {
             camera.updateViewMatrix();
@@ -30,20 +33,21 @@ export const CameraDemo = {
                 .activate()
                 .setCameraMatrix(camera.viewMatrix)
                 .renderModel(gridModel.preRender());
-            // quadShader
-            //     .activate()
-            //     .setCameraMatrix(camera.viewMatrix)
-            //     .renderModel(quadModel.preRender());
+            quadShader
+                .activate()
+                .setCameraMatrix(camera.viewMatrix)
+                .renderModel(quad1.preRender())
+                .renderModel(quad2.preRender());
         };
 
-        const renderLoop = RenderLoop(onRender, 60);
+        const renderLoop = RenderLoop(onRender, 30);
         renderLoop.start();
 
         return () => {
             renderLoop.stop();
             gl.fClearMeshCache();
             gridShader.deactivate();
-            //quadShader.deactivate();
+            quadShader.deactivate();
         }
     }
 };
