@@ -17,14 +17,22 @@ export const CameraDemo = {
         camera.transform.setPosition(0, 0.5, 2);
         CameraController(gl, camera);
 
+        const texture = gl.fLoadTexture('tex001', document.querySelector('#img-grass'));
+
         const gridShader = new GridAxisShader(gl, camera.projectionMatrix);
         const gridModel = Primitives.grid(true, true).createModel(gl);
 
-        const quadShader = new QuadShader(gl, camera.projectionMatrix);
-        const quad1 = Primitives.quad.createModel(gl);
-        quad1.transform.setPosition(-0.6, 0, 0).setScale(0.4, 0.4, 0.4);
+        const quadShader = new QuadShader(gl, camera.projectionMatrix).setTexture(texture);
+        const quad1 = Primitives.quad.createModel(gl, true, true);
+        quad1.transform
+            .setScale(0.4, 0.4, 0.4)
+            .setPosition(0, 0.4, 0);
+
         const quad2 = new Model(gl.mMeshCache['Quad']);
-        quad2.transform.setPosition(0.6, 0, 0).setScale(0.4, 0.4, 0.4);
+        quad2.transform
+            .setScale(0.4, 0.4, 0.4)
+            .setPosition(0, 0.4, 0)
+            .setRotation(0, 90, 0);
 
         const onRender = deltaTime => {
             camera.updateViewMatrix();
@@ -35,6 +43,7 @@ export const CameraDemo = {
                 .renderModel(gridModel.preRender());
             quadShader
                 .activate()
+                .preRender()
                 .setCameraMatrix(camera.viewMatrix)
                 .renderModel(quad1.preRender())
                 .renderModel(quad2.preRender());

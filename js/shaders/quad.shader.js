@@ -1,6 +1,8 @@
 import {Shader} from "../shader.js";
 
 export class QuadShader extends Shader {
+    #mainTexture;
+
     constructor(gl, projectionMatrix) {
         const vertexShaderSource = [
             '#version 300 es',
@@ -11,7 +13,7 @@ export class QuadShader extends Shader {
             'uniform mat4 uCameraMatrix;',
             'uniform mat4 uMVMatrix;',
             '',
-            'out vec2 uv;',
+            'out highp vec2 uv;',
             '',
             'void main(void) {',
             '   uv = a_uv;',
@@ -23,18 +25,31 @@ export class QuadShader extends Shader {
             '#version 300 es',
             'precision mediump float;',
             '',
-            'in vec2 uv;',
+            'in highp vec2 uv;',
+            'uniform sampler2D uMainTex;',
             'out vec4 finalColor;',
             '',
             'void main(void) {',
-            '   float c = (uv.x <= 0.1 || uv.x >= 0.9 || uv.y <= 0.1 || uv.y >= 0.9) ? 0.0 : 1.0;',
-            '   finalColor = vec4(c, c, c, 1.0 -c);',
+            '   finalColor = texture(uMainTex, vec2(uv.s, uv.t));',
             '}'
         ].join('\n');
 
         super(gl, vertexShaderSource, fragmentShaderSource);
 
         this.setPerspective(projectionMatrix);
+        this.#mainTexture = -1;
         gl.useProgram(null);
+    }
+
+    setTexture = id => {
+        this.#mainTexture = id;
+        return this;
+    };
+
+    preRender = () => {
+        this.gl.activeTexture(this.gl.TEXTURE0);
+        this.gl.bindTexture(this.gl.TEXTURE_2D, this.#mainTexture);
+        this.gl.uniform1i(this.uniformLoc.mainTexture, 0);
+        return this;
     }
 }

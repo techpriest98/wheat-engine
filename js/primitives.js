@@ -78,8 +78,9 @@ export const Primitives = {
         return grid;
     },
     quad: class {
-        static createModel = gl => new Model(Primitives.quad.createMesh(gl));
-        static createMesh = gl => {
+        static createModel = (gl, noCulling = false, doBlending = false) =>
+            new Model(Primitives.quad.createMesh(gl, noCulling, doBlending));
+        static createMesh = (gl, noCulling = false, doBlending = false) => {
             const vertices = [
                 -1, 1, 0,
                 -1, -1, 0,
@@ -98,8 +99,8 @@ export const Primitives = {
             ];
 
             const mesh = gl.createMeshVAO('Quad', {vertices, indices, uvs});
-            mesh.noCulling = false;
-            mesh.doBlending = false;
+            mesh.noCulling = noCulling;
+            mesh.doBlending = doBlending;
 
             return mesh;
         };

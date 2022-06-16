@@ -1,16 +1,16 @@
 import {ShaderUtils} from "./utils/shader-utils.js";
 
 export class Shader {
-    #gl;
     #vertexShader;
     #fragmentShader;
     #attribLoc;
-    #uniformLoc;
 
+    gl;
+    uniformLoc;
     program;
 
     constructor(gl, vertexShaderSource, fragmentShaderSource) {
-        this.#gl = gl;
+        this.gl = gl;
         this.#vertexShader = ShaderUtils.createShader(gl, vertexShaderSource, gl.VERTEX_SHADER);
         this.#fragmentShader =  ShaderUtils.createShader(gl, fragmentShaderSource, gl.FRAGMENT_SHADER);
         this.program = ShaderUtils.createProgram(gl, this.#vertexShader, this.#fragmentShader, true);
@@ -18,39 +18,39 @@ export class Shader {
         if (this.program) {
             gl.useProgram(this.program);
             this.#attribLoc = ShaderUtils.getStandardAttributeLocation(gl, this.program);
-            this.#uniformLoc = ShaderUtils.getStandardUniformLocation(gl, this.program);
+            this.uniformLoc = ShaderUtils.getStandardUniformLocation(gl, this.program);
         }
     }
 
     activate = () => {
-        this.#gl.useProgram(this.program);
+        this.gl.useProgram(this.program);
         return this;
     };
 
     deactivate = () => {
-        this.#gl.useProgram(null);
+        this.gl.useProgram(null);
         return this;
     };
 
     setPerspective = (matrixData) => {
-        this.#gl.uniformMatrix4fv(this.#uniformLoc.perspective, false, matrixData);
+        this.gl.uniformMatrix4fv(this.uniformLoc.perspective, false, matrixData);
         return this;
     };
 
     setModelMatrix = (matrixData) => {
-        this.#gl.uniformMatrix4fv(this.#uniformLoc.modelMatrix, false, matrixData);
+        this.gl.uniformMatrix4fv(this.uniformLoc.modelMatrix, false, matrixData);
         return this;
     };
 
     setCameraMatrix = (matrixData) => {
-        this.#gl.uniformMatrix4fv(this.#uniformLoc.cameraMatrix, false, matrixData);
+        this.gl.uniformMatrix4fv(this.uniformLoc.cameraMatrix, false, matrixData);
         return this;
     };
 
     dispose = () => {
-        if (this.#gl.getParameter(this.#gl.CURRENT_PROGRAM) === this.program) {
+        if (this.gl.getParameter(this.gl.CURRENT_PROGRAM) === this.program) {
             this.deactivate();
-            this.#gl.deleteProgram(this.program);
+            this.gl.deleteProgram(this.program);
         }
         return this;
     };
@@ -63,15 +63,20 @@ export class Shader {
         const {mesh, transform} = model;
 
         this.setModelMatrix(transform.matrixView.raw);
-        this.#gl.bindVertexArray(mesh.vao);
+        this.gl.bindVertexArray(mesh.vao);
+
+        if (mesh.noCulling) this.gl.disable(this.gl.CULL_FACE);
+        if (mesh.doBlending) this.gl.enable(this.gl.BLEND);
 
         if (mesh.indexCount) {
-            this.#gl.drawElements(mesh.drawMode, mesh.indexCount, this.#gl.UNSIGNED_SHORT, 0);
+            this.gl.drawElements(mesh.drawMode, mesh.indexCount, this.gl.UNSIGNED_SHORT, 0);
         } else {
-            this.#gl.drawArrays(mesh.drawMode, 0, mesh.vertexCount);
+            this.gl.drawArrays(mesh.drawMode, 0, mesh.vertexCount);
         }
 
-        this.#gl.bindVertexArray(null);
+        this.gl.bindVertexArray(null);
+        if (mesh.noCulling) this.gl.enable(this.gl.CULL_FACE);
+        if (mesh.doBlending) this.gl.disable(this.gl.BLEND);
         return this;
     };
 }
