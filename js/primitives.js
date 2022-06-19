@@ -104,6 +104,34 @@ export const Primitives = {
 
             return mesh;
         };
-    }
+    },
+    Cube: class {
+        static createModel = (gl, name = 'Cube') => new Model(Primitives.Cube.createMesh(gl, name));
+        static createMesh = (gl, name) => {
+            const vertices = [
+                -0.5, -0.5, -0.5,   -0.5, -0.5, 0.5,   0.5, -0.5, 0.5,    0.5, -0.5, -0.5,
+                0.5, 0.5, -0.5,     0.5, 0.5, 0.5,     -0.5, 0.5, -0.5,   0.5, 0.5, -0.5,
+                -0.5, 0.5, 0.5,     0.5, 0.5, 0.5,     -0.5, 0.5, -0.5,   -0.5, 0.5, 0.5,
+                0.5, 0.5, 0.5,      0.5, 0.5, -0.5
+            ];
+            const uvs = [
+                0.5,0.25,   0.5, 0.5,    0.75, 0.5,   0.75, 0.25,
+                1, 0.25,    1, 0.5,      0.5, 0,      0.75, 0,
+                0.5, 0.75,  0.75, 0.75,  0.25, 0.25,  0.25, 0.5,
+                0, 0.5,     0, 0.25
+            ];
+            const indices = [
+                0,1,2,  2,3,0,
+                3,2,5,  5,4,3,
+                6,0,3,  3,7,6,
+                1,8,9,  9,2,1,
+                10,11,1,  1,0,10,
+                13,12,11, 11,10,13
+            ];
 
+            const mesh = gl.createMeshVAO(name, {vertices, uvs, indices});
+            mesh.noCulling = false;
+            return mesh;
+        }
+    }
 };

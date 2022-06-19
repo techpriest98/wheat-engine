@@ -69,6 +69,7 @@ export const ShaderUtils = {
         perspective: gl.getUniformLocation(program, 'uPMatrix'),
         modelMatrix: gl.getUniformLocation(program, 'uMVMatrix'),
         cameraMatrix: gl.getUniformLocation(program, 'uCameraMatrix'),
-        mainTexture: gl.getUniformLocation(program, 'uMainTexture')
+        mainTexture: gl.getUniformLocation(program, 'uMainTexture'),
+        color: gl.getUniformLocation(program, 'uColor')
     })
 };

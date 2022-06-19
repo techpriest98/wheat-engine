@@ -1,14 +1,18 @@
 import {Shader} from "../shader.js";
+import {GlUtils} from "../utils/gl-utils.js";
+import {ShaderUtils} from "../utils/shader-utils.js";
 
-export class QuadShader extends Shader {
+export class OpaqueColorShader extends Shader {
+    #uColorLoc;
     #mainTexture;
 
-    constructor(gl, projectionMatrix) {
+    constructor(gl, projectionMatrix, color) {
         const vertexShaderSource =
         `#version 300 es
         
         in vec3 a_position;
         in vec2 a_uv;
+        
         uniform mat4 uPMatrix;
         uniform mat4 uCameraMatrix;
         uniform mat4 uMVMatrix;
@@ -27,16 +31,20 @@ export class QuadShader extends Shader {
         
         in highp vec2 uv;
         uniform sampler2D uMainTex;
+        uniform vec3 uColor;
+
         out vec4 finalColor;
         
         void main(void) {
-            finalColor = texture(uMainTex, vec2(uv.s, uv.t));
+            finalColor = texture(uMainTex, vec2(uv.s, uv.t)) * vec4(uColor.xyz, 1.0);
         }`;
 
         super(gl, vertexShaderSource, fragmentShaderSource);
 
         this.setPerspective(projectionMatrix);
+        this.#uColorLoc = ShaderUtils.getStandardUniformLocation(gl, this.program).color;
         this.#mainTexture = -1;
+        gl.uniform3fv(this.#uColorLoc, new Float32Array(GlUtils.rgbConverter(color)));
         gl.useProgram(null);
     }
 
@@ -45,10 +53,11 @@ export class QuadShader extends Shader {
         return this;
     };
 
-    preRender = () => {
+    preRender = color => {
         this.gl.activeTexture(this.gl.TEXTURE0);
         this.gl.bindTexture(this.gl.TEXTURE_2D, this.#mainTexture);
         this.gl.uniform1i(this.uniformLoc.mainTexture, 0);
+        this.gl.uniform3fv(this.#uColorLoc, new Float32Array(GlUtils.rgbConverter(color)));
         return this;
     }
 }

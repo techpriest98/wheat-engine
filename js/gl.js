@@ -41,7 +41,7 @@ export const GL = canvasId => {
     gl.mTextureCache = {};
 
     gl.cullFace(gl.BACK);
-    gl.frontFace(gl.CCW);
+    gl.frontFace(gl.CW);
     gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.CULL_FACE);
     gl.depthFunc(gl.LEQUAL);
