@@ -51,6 +51,12 @@ export class Camera {
         return this;
     };
 
+    getTranslatesMatrix = () => {
+        const matrix = new Float32Array(this.viewMatrix);
+        matrix[12] = matrix[13] = matrix[14] = 0.0;
+        return matrix;
+    };
+
     panX = v => {
         this.transform.position.x += this.transform.right[0] * v;
         if (this.#mode === Camera.MODE_ORBIT) {

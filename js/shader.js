@@ -66,6 +66,8 @@ export class Shader {
         this.gl.bindVertexArray(mesh.vao);
 
         if (mesh.noCulling) this.gl.disable(this.gl.CULL_FACE);
+        if (mesh.ccw) this.gl.frontFace(this.gl.CCW);
+
         if (mesh.doBlending) this.gl.enable(this.gl.BLEND);
 
         if (mesh.indexCount) {
@@ -77,6 +79,7 @@ export class Shader {
         this.gl.bindVertexArray(null);
         if (mesh.noCulling) this.gl.enable(this.gl.CULL_FACE);
         if (mesh.doBlending) this.gl.disable(this.gl.BLEND);
+        if (mesh.ccw) this.gl.frontFace(this.gl.CW);
         return this;
     };
 }

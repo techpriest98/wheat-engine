@@ -81,10 +81,11 @@ export const GL = canvasId => {
         return buffer;
     };
 
-    gl.createMeshVAO = (name, {vertices, normals, indices, uvs}, drawMode = gl.TRIANGLES) => {
+    gl.createMeshVAO = (name, {vertices, normals, indices, uvs}, ccw = false, drawMode = gl.TRIANGLES) => {
         let result = {};
 
         result.drawMode = drawMode;
+        result.ccw = ccw;
         result.vao = gl.createVertexArray();
         gl.bindVertexArray(result.vao);
 
@@ -149,6 +150,29 @@ export const GL = canvasId => {
             gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
         }
 
+        return texture;
+    };
+
+    gl.fLoadCubeMap = (name, imgArray) => {
+        if (!imgArray || !imgArray.length) {
+            return null;
+        }
+
+        const texture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
+
+        imgArray.forEach((image, i) => {
+            gl.texImage2D(gl.TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+        });
+
+        gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_R, gl.CLAMP_TO_EDGE);
+
+        gl.bindTexture(gl.TEXTURE_CUBE_MAP, null);
+        gl.mTextureCache[name] = texture;
         return texture;
     };
 

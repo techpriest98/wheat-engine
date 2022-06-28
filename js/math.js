@@ -1,3 +1,7 @@
+export class MathUtil {
+    static Map = (x, xMin, xMax, zMin, zMax) => (x - xMin) / (xMax - xMin) * (zMax - zMin) + zMin;
+}
+
 export class Vector3{
     constructor(x,y,z){	this.x = x || 0.0;	this.y = y || 0.0;	this.z = z || 0.0; }
 

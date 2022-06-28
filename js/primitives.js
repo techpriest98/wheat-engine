@@ -133,5 +133,34 @@ export const Primitives = {
             mesh.noCulling = false;
             return mesh;
         }
+    },
+    SkyMap: class {
+        static createModel = (gl, name = 'Skymap', scale = 1) => new Model(Primitives.SkyMap.createMesh(gl, name, scale));
+        static createMesh = (gl, name, scale) => {
+            const vertices = [
+                -scale, -scale, -scale,   -scale, -scale, scale,   scale, -scale, scale,    scale, -scale, -scale,
+                scale, scale, -scale,     scale, scale, scale,     -scale, scale, -scale,   scale, scale, -scale,
+                -scale, scale, scale,     scale, scale, scale,     -scale, scale, -scale,   -scale, scale, scale,
+                scale, scale, scale,      scale, scale, -scale
+            ];
+            const uvs = [
+                0.5,0.25,   0.5, 0.5,    0.75, 0.5,   0.75, 0.25,
+                1, 0.25,    1, 0.5,      0.5, 0,      0.75, 0,
+                0.5, 0.75,  0.75, 0.75,  0.25, 0.25,  0.25, 0.5,
+                0, 0.5,     0, 0.25
+            ];
+            const indices = [
+                0,3,2,  2,1,0,
+                3,4,5,  5,2,3,
+                6,7,3,  3,0,6,
+                1,2,9,  9,8,1,
+                10,0,1, 1,11,10,
+                13,10,11, 11,12,13
+            ];
+
+            const mesh = gl.createMeshVAO(name, {vertices, uvs, indices});
+            mesh.noCulling = false;
+            return mesh;
+        }
     }
 };

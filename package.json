@@ -1,0 +1,24 @@
+{
+  "name": "wheat-engine",
+  "version": "1.0.0",
+  "description": "WebGL 2.0 based game engine.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/techpriest98/wheat-engine.git"
+  },
+  "keywords": [
+    "game",
+    "engine",
+    "webgl"
+  ],
+  "author": "Andrii Yeromenko",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/techpriest98/wheat-engine/issues"
+  },
+  "homepage": "https://github.com/techpriest98/wheat-engine/tree/main"
+}
