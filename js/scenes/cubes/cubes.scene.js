@@ -11,8 +11,6 @@ import {SkyMapShader} from "../../shaders/skymap.shader.js";
 import {QuadShader} from "../../shaders/quad.shader.js";
 import {Model} from "../../model.js";
 
-import cubeObj from '../../../objects/cube.obj.js';
-
 export const CubesScene = {
     name: 'Cubes',
     init: () => {

@@ -11,12 +11,11 @@
     "url": "git+https://github.com/techpriest98/wheat-engine.git"
   },
   "keywords": [
-    "game",
-    "engine",
+    "game engine",
     "webgl"
   ],
   "author": "Andrii Yeromenko",
-  "license": "ISC",
+  "license": "GNU",
   "bugs": {
     "url": "https://github.com/techpriest98/wheat-engine/issues"
   },

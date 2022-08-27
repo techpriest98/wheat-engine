@@ -1,9 +1,11 @@
 import {CameraDemo} from "./scenes/camera/camera-demo.js";
 import {CubesScene} from './scenes/cubes/cubes.scene.js';
+import {MarchingCubesScene} from "./scenes/marching-cubes/marching-cubes.js";
 
 const scenes = [
     CameraDemo,
-    CubesScene
+    CubesScene,
+    MarchingCubesScene
 ];
 
 window.addEventListener('load', () => {
